@@ -72,16 +72,23 @@ export const authOptions: NextAuthOptions = {
       if (account && profile) {
         token.id = (profile as any).id as string;
 
-        // Fetch guild member roles using the access token
-        const roleIds = await fetchGuildMemberRoles(
-          account.access_token as string,
-          (profile as any).id as string
-        );
+        try {
+          // Fetch guild member roles using the access token
+          const roleIds = await fetchGuildMemberRoles(
+            account.access_token as string,
+            (profile as any).id as string
+          );
 
-        token.roles = roleIds;
-        token.accessLevel = determineAccessLevel(roleIds);
+          token.roles = roleIds;
+          token.accessLevel = determineAccessLevel(roleIds);
+        } catch (error) {
+          console.error('Error fetching roles:', error);
+          // Set default access level if role fetching fails
+          token.roles = [];
+          token.accessLevel = AccessLevel.NO_ACCESS;
+        }
 
-        console.log(`User ${(profile as any).id} authenticated with roles:`, roleIds);
+        console.log(`User ${(profile as any).id} authenticated with roles:`, token.roles);
         console.log(`Access level determined:`, token.accessLevel);
       }
 

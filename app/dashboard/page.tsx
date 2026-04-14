@@ -6,14 +6,12 @@
 
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { CyberRuleCard } from '@/components/content/CyberRuleCard';
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
   const [discordSections, setDiscordSections] = useState<any[] | null>(null);
   const [twitchSections, setTwitchSections] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,7 +51,7 @@ export default function DashboardPage() {
   // Show loading state
   if (loading) {
     return (
-      <MainLayout user={session?.user || null}>
+      <MainLayout user={null}>
         <div className="flex items-center justify-center min-h-[60vh] z-content">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -94,7 +92,7 @@ export default function DashboardPage() {
   const twitchWarningSections = twitchSections ? getWarningSections(twitchSections) : [];
 
   return (
-    <MainLayout user={session?.user || null}>
+    <MainLayout user={null}>
       <div className="z-content relative">
         {/* Welcome Section */}
         <motion.div

@@ -62,10 +62,8 @@ export function Header({ user }: HeaderProps) {
             </h2>
           </div>
 
-          {/* Profile */}
-          <div className="flex items-center">
-            {user && <ProfileDisplay user={user} />}
-          </div>
+          {/* Right side - empty */}
+          <div className="w-14"></div>
         </div>
       </div>
     </motion.header>

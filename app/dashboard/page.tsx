@@ -161,7 +161,7 @@ export default function DashboardPage() {
         {/* Rule Cards Grid */}
         <div className="space-y-12 max-w-7xl mx-auto">
           {/* Discord Rules */}
-          {(accessLevel === 'discord_moderator' || isEditor) && discordMainSections.length > 0 && (
+          {(accessLevel === 'discord_moderator' || accessLevel === 'rule_editor') && discordMainSections.length > 0 && (
             <div className="space-y-8">
               <h2 className="text-3xl font-black text-center text-cyan-400">Discord Модерация</h2>
               
@@ -207,7 +207,7 @@ export default function DashboardPage() {
           )}
 
           {/* Twitch Rules */}
-          {(accessLevel === 'twitch_moderator' || isEditor) && twitchMainSections.length > 0 && (
+          {(accessLevel === 'twitch_moderator' || accessLevel === 'rule_editor') && twitchMainSections.length > 0 && (
             <div className="space-y-8">
               <h2 className="text-3xl font-black text-center text-purple-400">Twitch Модерация</h2>
               

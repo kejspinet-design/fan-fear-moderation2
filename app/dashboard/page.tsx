@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { CyberRuleCard } from '@/components/content/CyberRuleCard';
+import { FloatingNav } from '@/components/navigation/FloatingNav';
 
 export default function DashboardPage() {
   const [discordSections, setDiscordSections] = useState<any[] | null>(null);
@@ -103,6 +104,14 @@ export default function DashboardPage() {
 
   return (
     <MainLayout user={null}>
+      {/* Floating Navigation */}
+      <FloatingNav
+        hasDiscordRules={discordMainSections.length > 0}
+        hasDiscordWarnings={discordWarningSections.length > 0}
+        hasTwitchRules={twitchMainSections.length > 0}
+        hasTwitchWarnings={twitchWarningSections.length > 0}
+      />
+
       <div className="z-content relative">
         {/* Welcome Section */}
         <motion.div
@@ -138,7 +147,7 @@ export default function DashboardPage() {
         <div className="space-y-12 max-w-7xl mx-auto">
           {/* Discord Rules */}
           {discordMainSections.length > 0 && (
-            <div className="space-y-8">
+            <div id="discord-rules" className="space-y-8">
               <h2 className="text-3xl font-black text-center text-cyan-400">Discord Модерация</h2>
               
               {/* Main Rules */}
@@ -160,7 +169,7 @@ export default function DashboardPage() {
 
               {/* Warning Removal Section */}
               {discordWarningSections.length > 0 && (
-                <div className="mt-8">
+                <div id="discord-warnings" className="mt-8">
                   <h3 className="text-2xl font-black text-center text-yellow-400 mb-6">Снятие выговоров</h3>
                   <div className="grid grid-cols-1 gap-6">
                     {discordWarningSections.map((section) => (
@@ -184,7 +193,7 @@ export default function DashboardPage() {
 
           {/* Twitch Rules */}
           {twitchMainSections.length > 0 && (
-            <div className="space-y-8">
+            <div id="twitch-rules" className="space-y-8">
               <h2 className="text-3xl font-black text-center text-purple-400">Twitch Модерация</h2>
               
               {/* Main Rules */}
@@ -206,7 +215,7 @@ export default function DashboardPage() {
 
               {/* Warning Removal Section */}
               {twitchWarningSections.length > 0 && (
-                <div className="mt-8">
+                <div id="twitch-warnings" className="mt-8">
                   <h3 className="text-2xl font-black text-center text-yellow-400 mb-6">Снятие выговоров</h3>
                   <div className="grid grid-cols-1 gap-6">
                     {twitchWarningSections.map((section) => (

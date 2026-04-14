@@ -31,10 +31,9 @@ export default withAuth(
 
     // Requirement 2.4, 2.6: Redirect restricted users to access-denied page
     if (path.startsWith('/dashboard')) {
-      if (
-        accessLevel === AccessLevel.RESTRICTED ||
-        !accessLevel
-      ) {
+      // Allow all authenticated users to view dashboard
+      // Only block if explicitly restricted
+      if (accessLevel === AccessLevel.RESTRICTED) {
         return NextResponse.redirect(new URL('/access-denied', req.url));
       }
     }

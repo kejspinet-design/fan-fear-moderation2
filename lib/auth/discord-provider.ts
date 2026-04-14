@@ -14,9 +14,8 @@ import DiscordProvider from 'next-auth/providers/discord';
  * 
  * - identify: Basic user information (username, avatar)
  * - email: User's email address
- * - guilds.members.read: Access to user's guild member data including roles
  */
-export const DISCORD_SCOPES = ['identify', 'email', 'guilds.members.read'].join(' ');
+export const DISCORD_SCOPES = ['identify', 'email'].join(' ');
 
 /**
  * Creates and configures the Discord OAuth provider

@@ -23,34 +23,12 @@ import { RulesGetResponse, RulesPutResponse, ApiErrorResponse } from '@/types/ap
  * GET /api/rules/discord
  * 
  * Retrieves Discord moderation rules.
- * Requires Discord_Moderator or Rule_Editor role.
+ * Public access - no authentication required.
  * 
  * @returns Discord rules with last modified timestamp
  */
 export async function GET(request: NextRequest): Promise<NextResponse<RulesGetResponse | ApiErrorResponse>> {
   try {
-    // Verify authentication
-    const session = await getServerSession(authOptions);
-    
-    if (!session || !session.user) {
-      return NextResponse.json(
-        { error: true, message: 'Unauthorized', statusCode: 401 },
-        { status: 401 }
-      );
-    }
-
-    // Authorization is handled by middleware, but double-check here
-    const accessLevel = session.user.accessLevel;
-    if (
-      accessLevel !== AccessLevel.DISCORD_MODERATOR &&
-      accessLevel !== AccessLevel.RULE_EDITOR
-    ) {
-      return NextResponse.json(
-        { error: true, message: 'Forbidden: Insufficient permissions for Discord content', statusCode: 403 },
-        { status: 403 }
-      );
-    }
-
     // Initialize repository
     const fileStorage = new FileStorage();
     const backupManager = new BackupManager(fileStorage);

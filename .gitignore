@@ -26,6 +26,7 @@ yarn-error.log*
 .env*.local
 .env.production
 .env.vercel
+.env.json
 
 # Vercel
 .vercel
@@ -64,6 +65,27 @@ desktop.ini
 # Logs
 *.log
 
-# Created env files for Vercel
+# Sensitive files - NEVER COMMIT
 vercel-env-variables.txt
 vercel-env.json
+VERCEL_ENV_VARIABLES.txt
+VERCEL_ENV_SETUP.md
+ENV_UPLOAD_GUIDE.md
+VERCEL_DEPLOY_GUIDE.md
+VERCEL_DEPLOY.md
+QUICK_DEPLOY.md
+DEPLOY.md
+PRODUCTION_NOTES.md
+GITHUB_GUIDE.md
+GITHUB_CHECKLIST.md
+GITHUB_WEB_UPLOAD.md
+
+# Deployment guides (contain sensitive info)
+*_DEPLOY*.md
+*_GUIDE*.md
+*_SETUP*.md
+*_CHECKLIST*.md
+
+# Environment variable files
+.env*
+!.env.example

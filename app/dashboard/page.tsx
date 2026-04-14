@@ -30,13 +30,6 @@ export default function DashboardPage() {
     }
   }, [status, router]);
 
-  // Redirect restricted users to access-denied page
-  useEffect(() => {
-    if (session?.user?.accessLevel === 'restricted') {
-      router.push('/access-denied');
-    }
-  }, [session, router]);
-
   // Fetch data based on access level
   useEffect(() => {
     if (!session?.user) {

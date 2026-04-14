@@ -48,8 +48,8 @@ export default withAuth(
       }
     }
 
-    // Requirement 2.1: Validate Twitch Moderator access to Twitch API content
-    if (path.startsWith('/api/rules/twitch') || path.startsWith('/api/warnings/twitch')) {
+    // Requirement 2.1: Validate Twitch Moderator access to Twitch API content (only for modifications)
+    if (path.startsWith('/api/rules/twitch') && (method === 'PUT' || method === 'POST')) {
       if (
         accessLevel !== AccessLevel.TWITCH_MODERATOR &&
         accessLevel !== AccessLevel.RULE_EDITOR
@@ -61,8 +61,8 @@ export default withAuth(
       }
     }
 
-    // Requirement 2.2: Validate Discord Moderator access to Discord API content
-    if (path.startsWith('/api/rules/discord') || path.startsWith('/api/warnings/discord')) {
+    // Requirement 2.2: Validate Discord Moderator access to Discord API content (only for modifications)
+    if (path.startsWith('/api/rules/discord') && (method === 'PUT' || method === 'POST')) {
       if (
         accessLevel !== AccessLevel.DISCORD_MODERATOR &&
         accessLevel !== AccessLevel.RULE_EDITOR

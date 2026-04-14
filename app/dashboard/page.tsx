@@ -25,17 +25,27 @@ export default function DashboardPage() {
 
       try {
         // Fetch Discord data
+        console.log('Fetching Discord rules...');
         const rulesRes = await fetch('/api/rules/discord');
+        console.log('Discord response status:', rulesRes.status);
         if (rulesRes.ok) {
           const rulesData = await rulesRes.json();
+          console.log('Discord data:', rulesData);
           setDiscordSections(rulesData.sections);
+        } else {
+          console.error('Discord fetch failed:', rulesRes.status, rulesRes.statusText);
         }
 
         // Fetch Twitch data
+        console.log('Fetching Twitch rules...');
         const twitchRes = await fetch('/api/rules/twitch');
+        console.log('Twitch response status:', twitchRes.status);
         if (twitchRes.ok) {
           const twitchData = await twitchRes.json();
+          console.log('Twitch data:', twitchData);
           setTwitchSections(twitchData.sections);
+        } else {
+          console.error('Twitch fetch failed:', twitchRes.status, twitchRes.statusText);
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -108,15 +118,19 @@ export default function DashboardPage() {
           </p>
         </motion.div>
 
-        {/* Error Message */}
-        {error && (
+        {/* Debug Info */}
+        {!loading && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mb-8 p-4 rounded-xl backdrop-blur-md"
-            style={{ background: 'rgba(255, 0, 110, 0.1)', border: '1px solid rgba(255, 0, 110, 0.3)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mb-8 p-4 rounded-xl backdrop-blur-md text-center"
+            style={{ background: 'rgba(0, 217, 255, 0.1)', border: '1px solid rgba(0, 217, 255, 0.2)' }}
           >
-            <p className="text-red-400 text-center font-semibold">{error}</p>
+            <p className="text-cyan-400 font-semibold">
+              Discord секций: {discordSections?.length || 0} | 
+              Twitch секций: {twitchSections?.length || 0}
+            </p>
+            {error && <p className="text-red-400 mt-2">Ошибка: {error}</p>}
           </motion.div>
         )}
 

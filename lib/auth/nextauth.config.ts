@@ -64,62 +64,35 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     /**
      * JWT callback - runs when JWT is created or updated
-     * 
-     * Extracts role IDs from Discord profile and determines access level.
      */
     async jwt({ token, account, profile }): Promise<JWT> {
-      // On initial sign in, extract roles and determine access level
       if (account && profile) {
         token.id = (profile as any).id as string;
-
-        try {
-          // Fetch guild member roles using the access token
-          const roleIds = await fetchGuildMemberRoles(
-            account.access_token as string,
-            (profile as any).id as string
-          );
-
-          token.roles = roleIds;
-          token.accessLevel = determineAccessLevel(roleIds);
-        } catch (error) {
-          console.error('Error fetching roles:', error);
-          // Set default access level if role fetching fails
-          token.roles = [];
-          token.accessLevel = AccessLevel.NO_ACCESS;
-        }
-
-        console.log(`User ${(profile as any).id} authenticated with roles:`, token.roles);
-        console.log(`Access level determined:`, token.accessLevel);
+        token.roles = [];
+        token.accessLevel = AccessLevel.NO_ACCESS;
       }
-
       return token;
     },
 
     /**
      * Session callback - runs when session is checked
-     * 
-     * Adds custom fields (roles, accessLevel) to the session object.
      */
     async session({ session, token }): Promise<Session> {
-      // Add custom fields to session
       if (session.user) {
         session.user.id = token.id as string;
         session.user.roles = token.roles as string[];
         session.user.accessLevel = token.accessLevel as AccessLevel;
       }
-
       return session;
     },
   },
 
   pages: {
     signIn: '/',
-    error: '/auth/error',
   },
 
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
 
   secret: process.env.NEXTAUTH_SECRET,

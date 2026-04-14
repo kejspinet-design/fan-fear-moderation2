@@ -39,7 +39,7 @@ export default function DashboardPage() {
 
   // Fetch data based on access level
   useEffect(() => {
-    if (!session?.user?.accessLevel || session.user.accessLevel === 'restricted') {
+    if (!session?.user) {
       return;
     }
 
@@ -50,22 +50,18 @@ export default function DashboardPage() {
       try {
         const accessLevel = session.user.accessLevel as AccessLevel;
 
-        // Fetch Discord data
-        if (accessLevel === 'discord_moderator' || accessLevel === 'rule_editor') {
-          const rulesRes = await fetch('/api/rules/discord');
-          if (rulesRes.ok) {
-            const rulesData = await rulesRes.json();
-            setDiscordSections(rulesData.sections);
-          }
+        // Fetch Discord data for all authenticated users
+        const rulesRes = await fetch('/api/rules/discord');
+        if (rulesRes.ok) {
+          const rulesData = await rulesRes.json();
+          setDiscordSections(rulesData.sections);
         }
 
-        // Fetch Twitch data
-        if (accessLevel === 'twitch_moderator' || accessLevel === 'rule_editor') {
-          const rulesRes = await fetch('/api/rules/twitch');
-          if (rulesRes.ok) {
-            const rulesData = await rulesRes.json();
-            setTwitchSections(rulesData.sections);
-          }
+        // Fetch Twitch data for all authenticated users
+        const twitchRes = await fetch('/api/rules/twitch');
+        if (twitchRes.ok) {
+          const twitchData = await twitchRes.json();
+          setTwitchSections(twitchData.sections);
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -97,7 +93,7 @@ export default function DashboardPage() {
   }
 
   // Show nothing while redirecting
-  if (!session || session.user.accessLevel === 'restricted') {
+  if (!session) {
     return null;
   }
 
@@ -161,7 +157,7 @@ export default function DashboardPage() {
         {/* Rule Cards Grid */}
         <div className="space-y-12 max-w-7xl mx-auto">
           {/* Discord Rules */}
-          {(accessLevel === 'discord_moderator' || accessLevel === 'rule_editor') && discordMainSections.length > 0 && (
+          {discordMainSections.length > 0 && (
             <div className="space-y-8">
               <h2 className="text-3xl font-black text-center text-cyan-400">Discord Модерация</h2>
               
@@ -207,7 +203,7 @@ export default function DashboardPage() {
           )}
 
           {/* Twitch Rules */}
-          {(accessLevel === 'twitch_moderator' || accessLevel === 'rule_editor') && twitchMainSections.length > 0 && (
+          {twitchMainSections.length > 0 && (
             <div className="space-y-8">
               <h2 className="text-3xl font-black text-center text-purple-400">Twitch Модерация</h2>
               

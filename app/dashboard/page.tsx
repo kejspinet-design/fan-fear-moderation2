@@ -7,50 +7,33 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { CyberRuleCard } from '@/components/content/CyberRuleCard';
-import type { RuleContent } from '@/types/rules';
-import type { AccessLevel } from '@/types/auth';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  const router = useRouter();
   const [discordSections, setDiscordSections] = useState<any[] | null>(null);
   const [twitchSections, setTwitchSections] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Redirect to home if not authenticated
+  // Fetch data
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/');
-    }
-  }, [status, router]);
-
-  // Fetch data based on access level
-  useEffect(() => {
-    if (!session?.user) {
-      return;
-    }
-
     const fetchData = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const accessLevel = session.user.accessLevel as AccessLevel;
-
-        // Fetch Discord data for all authenticated users
+        // Fetch Discord data
         const rulesRes = await fetch('/api/rules/discord');
         if (rulesRes.ok) {
           const rulesData = await rulesRes.json();
           setDiscordSections(rulesData.sections);
         }
 
-        // Fetch Twitch data for all authenticated users
+        // Fetch Twitch data
         const twitchRes = await fetch('/api/rules/twitch');
         if (twitchRes.ok) {
           const twitchData = await twitchRes.json();
@@ -65,12 +48,12 @@ export default function DashboardPage() {
     };
 
     fetchData();
-  }, [session]);
+  }, []);
 
   // Show loading state
-  if (status === 'loading' || loading) {
+  if (loading) {
     return (
-      <MainLayout user={null}>
+      <MainLayout user={session?.user || null}>
         <div className="flex items-center justify-center min-h-[60vh] z-content">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -84,14 +67,6 @@ export default function DashboardPage() {
       </MainLayout>
     );
   }
-
-  // Show nothing while redirecting
-  if (!session) {
-    return null;
-  }
-
-  const accessLevel = session.user.accessLevel as AccessLevel;
-  const isEditor = accessLevel === 'rule_editor';
 
   // Separate rules and warnings sections
   const getMainSections = (sections: any[]) => {

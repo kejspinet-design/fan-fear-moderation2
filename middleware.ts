@@ -102,8 +102,5 @@ export default withAuth(
  * - /api/warnings and all sub-routes
  */
 export const config = {
-  matcher: [
-    '/api/rules/:path*',
-    '/api/warnings/:path*',
-  ],
+  matcher: [],
 };

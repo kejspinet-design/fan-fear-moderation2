@@ -33,7 +33,6 @@ export default withAuth(
     if (path.startsWith('/dashboard')) {
       if (
         accessLevel === AccessLevel.RESTRICTED ||
-        accessLevel === AccessLevel.NO_ACCESS ||
         !accessLevel
       ) {
         return NextResponse.redirect(new URL('/access-denied', req.url));

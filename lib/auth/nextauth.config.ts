@@ -103,6 +103,17 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
+
+    /**
+     * Redirect callback - redirects user after sign in
+     */
+    async redirect({ url, baseUrl }) {
+      // If the user is signing in, redirect to dashboard
+      if (url.startsWith(baseUrl)) {
+        return '/dashboard';
+      }
+      return baseUrl + '/dashboard';
+    },
   },
 
   pages: {
